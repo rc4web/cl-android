@@ -21,6 +21,11 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:22.+'
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta1'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.easing:library:1.0.0@aar'
+    compile 'com.daimajia.androidanimations:library:1.0.8@aar'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 }
