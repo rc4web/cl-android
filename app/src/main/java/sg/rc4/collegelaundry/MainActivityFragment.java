@@ -30,7 +30,6 @@ public class MainActivityFragment extends Fragment {
 
     Timer displayUpdateTimer;
     DateTime dtLaundryDone;
-    boolean isDone = false;
 
     public MainActivityFragment() {
     }
@@ -52,7 +51,13 @@ public class MainActivityFragment extends Fragment {
                             timerDisplay.setText(R.string.timerDisplay);
                         } else {
                             Period diff = new Period(new DateTime(), dtLaundryDone);
-                            timerDisplay.setText(DateUtils.formatElapsedTime(diff.toStandardSeconds().getSeconds()));
+                            int totalSeconds = diff.toStandardSeconds().getSeconds();
+                            if (totalSeconds < 0) {
+                                // the laundry has been done!!!
+                                timerDisplay.setText("Done for " + DateUtils.formatElapsedTime(-1 * totalSeconds));
+                            } else {
+                                timerDisplay.setText(DateUtils.formatElapsedTime(totalSeconds));
+                            }
                         }
                     }
                 });
