@@ -46,7 +46,7 @@ public class MainActivityFragment extends Fragment {
 
     public void alert(){
         Vibrator v = new Vibrator(getContext());
-        v.vibrate();
+        v.vibrate(2000);
     }
 
     protected Context getContext() {
