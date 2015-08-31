@@ -66,10 +66,11 @@ public class MainActivityFragment extends Fragment {
         Log.i("DEBUG", "MainActivityFragment::onResume");
         super.onResume();
         pref = getActivity().getSharedPreferences(getString(R.string.app_name), 0);
-        String laundryDoneString = pref.getString("dtLaundryDone", null);
+        String laundryDoneString = pref.getString(getString(R.string.dtLaundryDoneKey), null);
         Log.i("DEBUG", "MainActivityFragment::onResume - " + laundryDoneString);
         if (laundryDoneString != null) {
             dtLaundryDone = new DateTime(laundryDoneString);
+            pref.edit().remove(getString(R.string.dtLaundryDoneKey)).commit();
         }
     }
 
@@ -78,7 +79,9 @@ public class MainActivityFragment extends Fragment {
         super.onPause();
         Log.i("DEBUG", "MainActivityFragment::onPause");
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("dtLaundryDone", dtLaundryDone.toString());
+        if (dtLaundryDone != null) {
+            editor.putString(getString(R.string.dtLaundryDoneKey), dtLaundryDone.toString());
+        }
         editor.apply();
     }
 
