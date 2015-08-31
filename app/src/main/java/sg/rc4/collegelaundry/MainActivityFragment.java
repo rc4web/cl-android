@@ -19,6 +19,7 @@ import java.util.TimerTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import sg.rc4.collegelaundry.utility.Vibrator;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -30,8 +31,14 @@ public class MainActivityFragment extends Fragment {
 
     Timer displayUpdateTimer;
     DateTime dtLaundryDone;
+    boolean hasDoneAlerted = false;
 
     public MainActivityFragment() {
+    }
+
+    public void alert(){
+        Vibrator v = new Vibrator(getActivity().getApplicationContext());
+        v.vibrate();
     }
 
     @Override
@@ -53,6 +60,10 @@ public class MainActivityFragment extends Fragment {
                             Period diff = new Period(new DateTime(), dtLaundryDone);
                             int totalSeconds = diff.toStandardSeconds().getSeconds();
                             if (totalSeconds < 0) {
+                                if (!hasDoneAlerted) {
+                                    alert();
+                                    hasDoneAlerted = true;
+                                }
                                 // the laundry has been done!!!
                                 timerDisplay.setText("Done for " + DateUtils.formatElapsedTime(-1 * totalSeconds));
                             } else {
@@ -69,8 +80,8 @@ public class MainActivityFragment extends Fragment {
     @OnClick(R.id.timerDisplay)
     void timerDisplayTap(View v) {
         if (dtLaundryDone == null) {
+            hasDoneAlerted = false;
             dtLaundryDone = (new DateTime()).plusMinutes(35);
-
         } else {
             dtLaundryDone = null;
         }
