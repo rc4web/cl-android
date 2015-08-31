@@ -1,5 +1,8 @@
 package sg.rc4.collegelaundry;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -43,7 +46,10 @@ public class MainActivityFragment extends Fragment {
                 }
 
                 public void onFinish() {
-                    timerDisplay.setText("done!");
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getActivity().getApplicationContext(), notification);
+                    r.play();
+                    timerDisplay.setText("Laundry is done!");
                 }
             }.start();
         } else {
