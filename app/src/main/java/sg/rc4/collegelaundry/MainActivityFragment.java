@@ -1,10 +1,6 @@
 package sg.rc4.collegelaundry;
 
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.CountDownTimer;
-import android.os.Vibrator;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -12,6 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Period;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,7 +28,9 @@ public class MainActivityFragment extends Fragment {
     @Bind(R.id.timerDisplay)
     TextView timerDisplay;
 
-    CountDownTimer timer;
+    Timer displayUpdateTimer;
+    DateTime dtLaundryDone;
+    boolean isDone = false;
 
     public MainActivityFragment() {
     }
@@ -35,30 +40,34 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+
+        displayUpdateTimer = new Timer();
+        displayUpdateTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dtLaundryDone == null) {
+                            timerDisplay.setText(R.string.timerDisplay);
+                        } else {
+                            Period diff = new Period(new DateTime(), dtLaundryDone);
+                            timerDisplay.setText(DateUtils.formatElapsedTime(diff.toStandardSeconds().getSeconds()));
+                        }
+                    }
+                });
+            }
+        }, 200, 200);
         return view;
     }
 
-    @OnClick(R.id.timerDisplay) void timerDisplayTap(View v) {
-        if (timer == null) {
-            timer = new CountDownTimer(35 * 60 * 1000, 500) {
+    @OnClick(R.id.timerDisplay)
+    void timerDisplayTap(View v) {
+        if (dtLaundryDone == null) {
+            dtLaundryDone = (new DateTime()).plusMinutes(35);
 
-                public void onTick(long millisUntilFinished) {
-                    timerDisplay.setText(DateUtils.formatElapsedTime(millisUntilFinished / 1000));
-                }
-
-                public void onFinish() {
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Ringtone r = RingtoneManager.getRingtone(getActivity().getApplicationContext(), notification);
-                    r.play();
-                    Vibrator v = (Vibrator) getActivity().getApplicationContext().getSystemService(getActivity().getApplicationContext().VIBRATOR_SERVICE);
-                    // Vibrate for 500 milliseconds
-                    v.vibrate(500);
-                    timerDisplay.setText("Laundry is done!");
-                }
-            }.start();
         } else {
-            timer.cancel();
-            timer = null;
+            dtLaundryDone = null;
         }
     }
 }
