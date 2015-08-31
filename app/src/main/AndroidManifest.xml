@@ -19,6 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".OnAlarmReceive" />
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE"/>
