@@ -1,5 +1,6 @@
 package sg.rc4.collegelaundry;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -92,7 +93,11 @@ public class MainActivityFragment extends Fragment {
         displayUpdateTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
+                Activity activity = getActivity();
+                if (activity == null) {
+                    return;
+                }
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (dtLaundryDone == null) {
