@@ -154,14 +154,15 @@ public class MainActivityFragment extends Fragment {
     @OnClick(R.id.timerDisplay)
     void timerDisplayTap(View v) {
         if (dtLaundryDone == null) {
+            int seconds = 35 * 60;
             hasDoneAlerted = false;
-            dtLaundryDone = (new DateTime()).plusSeconds(1 * 60);
+            dtLaundryDone = (new DateTime()).plusSeconds(seconds);
             AlarmManager alarm = (AlarmManager)getContext().getSystemService(getContext().ALARM_SERVICE);
             Intent intent = new Intent(getContext(), OnAlarmReceive.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     getContext(), 0, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1 * 60 * 1000, pendingIntent);
+            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ seconds * 1000, pendingIntent);
         } else {
             dtLaundryDone = null;
         }
