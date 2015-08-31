@@ -2,13 +2,15 @@ package sg.rc4.collegelaundry;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.Period;
 
 import java.util.Timer;
@@ -48,6 +49,34 @@ public class MainActivityFragment extends Fragment {
     public void alert(){
         Vibrator v = new Vibrator(getContext());
         v.vibrate(2000);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getActivity())
+                        .setSmallIcon(R.drawable.ic_stat_college_laundry_notification_icon)
+                        .setContentTitle("Your laundry is done!")
+                        .setContentText("College Laundry");
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(getActivity(), MainActivity.class);
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(MainActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+        mNotificationManager.notify(230141, mBuilder.build());
     }
 
     protected Context getContext() {
@@ -126,13 +155,13 @@ public class MainActivityFragment extends Fragment {
     void timerDisplayTap(View v) {
         if (dtLaundryDone == null) {
             hasDoneAlerted = false;
-            dtLaundryDone = (new DateTime()).plusSeconds(35 * 60);
+            dtLaundryDone = (new DateTime()).plusSeconds(1 * 60);
             AlarmManager alarm = (AlarmManager)getContext().getSystemService(getContext().ALARM_SERVICE);
             Intent intent = new Intent(getContext(), OnAlarmReceive.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     getContext(), 0, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 35 * 60 * 1000, pendingIntent);
+            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1 * 60 * 1000, pendingIntent);
         } else {
             dtLaundryDone = null;
         }
