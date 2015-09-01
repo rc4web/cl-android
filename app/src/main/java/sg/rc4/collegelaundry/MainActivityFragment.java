@@ -140,7 +140,12 @@ public class MainActivityFragment extends Fragment {
                                     hasDoneAlerted = true;
                                 }
                                 // the laundry has been done!!!
-                                timerDisplay.setText("Done for " + DateUtils.formatElapsedTime(-1 * totalSeconds));
+                                if (totalSeconds > -20) {
+                                    timerDisplay.setText("Laundry is done!");
+                                } else {
+                                    // the laundry has been done!!!
+                                    timerDisplay.setText("Done for " + DateUtils.formatElapsedTime(-1 * totalSeconds));
+                                }
                             } else {
                                 timerDisplay.setText(DateUtils.formatElapsedTime(totalSeconds));
                             }
