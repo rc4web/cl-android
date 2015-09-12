@@ -34,6 +34,8 @@ import sg.rc4.collegelaundry.utility.Vibrator;
  */
 public class MainActivityFragment extends Fragment {
 
+    private final int NOTIFICATION_ID = 4021495;
+
     @Bind(R.id.timerDisplay)
     TextView timerDisplay;
 
@@ -76,7 +78,7 @@ public class MainActivityFragment extends Fragment {
         NotificationManager mNotificationManager =
                 (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
-        mNotificationManager.notify(230141, mBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     protected Context getContext() {
@@ -169,7 +171,12 @@ public class MainActivityFragment extends Fragment {
             dtLaundryDone = (new DateTime()).plusSeconds(seconds);
             alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ seconds * 1000, pendingIntent);
         } else {
+            // remove the notification
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(NOTIFICATION_ID);
             dtLaundryDone = null;
+            // cancel the alarm
             alarm.cancel(pendingIntent);
         }
     }
