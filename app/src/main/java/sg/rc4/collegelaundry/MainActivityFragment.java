@@ -34,7 +34,7 @@ import sg.rc4.collegelaundry.utility.Vibrator;
  */
 public class MainActivityFragment extends Fragment {
 
-    private final int NOTIFICATION_ID = 4021495;
+    private final int DEFAULT_NOTIFICATION_ID = 4021495;
 
     @Bind(R.id.timerDisplay)
     TextView timerDisplay;
@@ -45,7 +45,22 @@ public class MainActivityFragment extends Fragment {
 
     SharedPreferences pref;
 
+    private int timerSeconds = 2100;
+    private int notificationId = DEFAULT_NOTIFICATION_ID;
+
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void setArguments(Bundle arguments){
+        super.setArguments(arguments);
+        if (getArguments().containsKey("timer")) {
+            timerSeconds = getArguments().getInt("timer");
+        }
+
+        if (getArguments().containsKey("notification")) {
+            timerSeconds = getArguments().getInt("notification");
+        }
     }
 
     public void alert(){
@@ -78,7 +93,7 @@ public class MainActivityFragment extends Fragment {
         NotificationManager mNotificationManager =
                 (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(notificationId, mBuilder.build());
     }
 
     protected Context getContext() {
@@ -166,15 +181,14 @@ public class MainActivityFragment extends Fragment {
                 getContext(), 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         if (dtLaundryDone == null) {
-            int seconds = 35 * 60;
             hasDoneAlerted = false;
-            dtLaundryDone = (new DateTime()).plusSeconds(seconds);
-            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ seconds * 1000, pendingIntent);
+            dtLaundryDone = (new DateTime()).plusSeconds(timerSeconds);
+            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ timerSeconds * 1000, pendingIntent);
         } else {
             // remove the notification
             NotificationManager mNotificationManager =
                     (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(NOTIFICATION_ID);
+            mNotificationManager.cancel(notificationId);
             dtLaundryDone = null;
             // cancel the alarm
             alarm.cancel(pendingIntent);

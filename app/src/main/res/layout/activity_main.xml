@@ -29,7 +29,7 @@ tools:context="sg.rc4.collegelaundry.MainActivity">
                     android:orientation="vertical">
 
                     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
+                        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/washerFragment"
                         android:name="sg.rc4.collegelaundry.MainActivityFragment" tools:layout="@layout/fragment_main"
                         android:layout_width="match_parent" android:layout_height="match_parent" />
 
@@ -44,7 +44,7 @@ tools:context="sg.rc4.collegelaundry.MainActivity">
 
 
                     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment2"
+                        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/dryerFragment"
                         android:name="sg.rc4.collegelaundry.MainActivityFragment" tools:layout="@layout/fragment_main"
                         android:layout_width="match_parent" android:layout_height="match_parent" />
 

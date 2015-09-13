@@ -19,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.tabHost)
     TabHost tabHost;
 
+    @Bind(R.id.washerFragment)
+    MainActivityFragment washerFragment;
+
+    @Bind(R.id.dryerFragment)
+    MainActivityFragment dryerFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +42,19 @@ public class MainActivity extends AppCompatActivity {
 
         tabHost.setup();
 
+        Bundle washerBundle = new Bundle();
+        washerBundle.putInt("timer", 35 * 60);
+        washerBundle.putInt("notificationId", 1576623);
+        washerFragment.setArguments(washerBundle);
         TabHost.TabSpec washerTab = tabHost.newTabSpec("Washer");
         washerTab.setContent(R.id.tab1);
         washerTab.setIndicator("Washer");
         tabHost.addTab(washerTab);
 
+        Bundle dryerBundle = new Bundle();
+        dryerBundle.putInt("timer", 30 * 60);
+        dryerBundle.putInt("notificationId", 654311);
+        washerFragment.setArguments(dryerBundle);
         TabHost.TabSpec dryerTab = tabHost.newTabSpec("Dryer");
         dryerTab.setContent(R.id.tab2);
         dryerTab.setIndicator("Dryer");
