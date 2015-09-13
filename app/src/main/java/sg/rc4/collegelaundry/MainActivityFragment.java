@@ -53,13 +53,14 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle arguments){
-        super.setArguments(arguments);
-        if (getArguments().containsKey("timer")) {
-            timerSeconds = getArguments().getInt("timer");
-        }
+        if (arguments != null) {
+            if (arguments.containsKey("timer")) {
+                timerSeconds = arguments.getInt("timer");
+            }
 
-        if (getArguments().containsKey("notification")) {
-            timerSeconds = getArguments().getInt("notification");
+            if (arguments.containsKey("notification")) {
+                timerSeconds = arguments.getInt("notification");
+            }
         }
     }
 
