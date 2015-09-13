@@ -58,8 +58,8 @@ public class MainActivityFragment extends Fragment {
                 timerSeconds = arguments.getInt("timer");
             }
 
-            if (arguments.containsKey("notification")) {
-                timerSeconds = arguments.getInt("notification");
+            if (arguments.containsKey("notificationId")) {
+                notificationId = arguments.getInt("notificationId");
             }
         }
     }
@@ -114,21 +114,21 @@ public class MainActivityFragment extends Fragment {
         Log.i("DEBUG", "MainActivityFragment::onResume");
         super.onResume();
         pref = getActivity().getSharedPreferences(getString(R.string.app_name), 0);
-        String laundryDoneString = pref.getString(getString(R.string.dtLaundryDoneKey), null);
-        Log.i("DEBUG", "MainActivityFragment::onResume - " + laundryDoneString);
+        String laundryDoneString = pref.getString(getString(R.string.dtLaundryDoneKey) + notificationId, null);
+        Log.i("DEBUG", "MainActivityFragment::onResume - " + laundryDoneString + " NOTIF: " + notificationId);
         if (laundryDoneString != null) {
             dtLaundryDone = new DateTime(laundryDoneString);
-            pref.edit().remove(getString(R.string.dtLaundryDoneKey)).commit();
+            pref.edit().remove(getString(R.string.dtLaundryDoneKey) + notificationId).commit();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("DEBUG", "MainActivityFragment::onPause");
+        Log.i("DEBUG", "MainActivityFragment::onPause" + " NOTIF: " + notificationId);
         SharedPreferences.Editor editor = pref.edit();
         if (dtLaundryDone != null) {
-            editor.putString(getString(R.string.dtLaundryDoneKey), dtLaundryDone.toString());
+            editor.putString(getString(R.string.dtLaundryDoneKey) + notificationId, dtLaundryDone.toString());
         }
         editor.apply();
     }
