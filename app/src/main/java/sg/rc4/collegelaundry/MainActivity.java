@@ -7,10 +7,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TabHost;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Bind(R.id.tabHost)
+    TabHost tabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(this.getResources().getColor(R.color.statusbar_background));
         }
+        ButterKnife.bind(this);
+
+        tabHost.setup();
+
+        TabHost.TabSpec washerTab = tabHost.newTabSpec("Washer");
+        washerTab.setContent(R.id.tab1);
+        washerTab.setIndicator("Washer");
+        tabHost.addTab(washerTab);
+
+        TabHost.TabSpec dryerTab = tabHost.newTabSpec("Dryer");
+        dryerTab.setContent(R.id.tab2);
+        dryerTab.setIndicator("Dryer");
+        tabHost.addTab(dryerTab);
     }
 
 

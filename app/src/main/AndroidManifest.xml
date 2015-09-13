@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="sg.rc4.collegelaundry" >
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        tools:replace="android:icon"
         android:label="@string/app_name"
         android:theme="@style/RC4Theme"
-        >
+        tools:replace="android:icon" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -20,10 +21,8 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".OnAlarmReceive" />
-    </application>
+        <receiver android:name=".OnAlarmReceive" />
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    </application>
 
 </manifest>
